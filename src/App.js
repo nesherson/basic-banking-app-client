@@ -1,5 +1,13 @@
+import { BrowserRouter as Router } from 'react-router-dom';
+
+import Signup from './features/auth/components/Signup';
+
 function App() {
-  return <h1>Hello World</h1>;
+  return (
+    <Router>
+      <Signup />
+    </Router>
+  );
 }
 
 export default App;
