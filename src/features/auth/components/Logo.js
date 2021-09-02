@@ -5,21 +5,21 @@ const Headline = styled.h1`
   padding: 0.2em 0.32em;
   font-size: 2.45rem;
   font-weight: 400;
-  color: #1e3e60;
-  border: 4px solid #18324e;
+  color: ${(props) => props.colorLight};
+  border: 4px solid ${(props) => props.colorDark};
 `;
 
 const B = styled.span`
   font-size: 2.75rem;
   font-weight: 600;
-  color: #18324e;
+  color: ${(props) => props.colorDark};
 `;
 
-function Logo() {
+function Logo({ colorLight, colorDark }) {
   return (
     <>
-      <Headline>
-        <B>B</B>asic<B>B</B>ank
+      <Headline colorLight={colorLight} colorDark={colorDark}>
+        <B colorDark={colorDark}>B</B>asic<B colorDark={colorDark}>B</B>ank
       </Headline>
     </>
   );

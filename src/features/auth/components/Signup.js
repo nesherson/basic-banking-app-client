@@ -2,11 +2,18 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 import SignupForm from './SignupForm';
+import Logo from './Logo';
 import img from '../../../assets/images/signupImg.jpg';
 
 const Container = styled.div`
   min-height: 100vh;
   display: flex;
+`;
+
+const LogoWrapper = styled.div`
+  position: absolute;
+  z-index: 999;
+  left: 25px;
 `;
 
 const ImageWrapper = styled.section`
@@ -74,6 +81,9 @@ function Signup() {
   return (
     <Container>
       <ImageWrapper>
+        <LogoWrapper>
+          <Logo colorLight='#595959' colorDark='#404040' />
+        </LogoWrapper>
         <Image src={img} />
       </ImageWrapper>
       <FormWrapper>
@@ -85,7 +95,7 @@ function Signup() {
         </SignupDescription>
         <SignupForm />
         <Text>
-          Already have an account? <Link to='#'>Log in</Link>
+          Already have an account? <Link to='/login'>Log in</Link>
         </Text>
       </FormWrapper>
     </Container>

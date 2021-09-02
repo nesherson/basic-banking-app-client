@@ -66,7 +66,7 @@ function Login() {
         <Image src={img} />
       </ImageWrapper>
       <FormWrapper>
-        <Logo />
+        <Logo colorLight='#1e3e60' colorDark='#18324e' />
         <Header>Login</Header>
         <SubHeader>Login to your account</SubHeader>
         <LoginDescription>
@@ -74,7 +74,7 @@ function Login() {
         </LoginDescription>
         <LoginForm />
         <Text>
-          Don't have an account yet? <Link to='#'>Join Basic Bank</Link>
+          Don't have an account yet? <Link to='/signup'>Join Basic Bank</Link>
         </Text>
       </FormWrapper>
     </Container>
