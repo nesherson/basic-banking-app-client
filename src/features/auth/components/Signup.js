@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 import SignupForm from './SignupForm';
-import img from '../../../assets/images/arch2.jpg';
+import img from '../../../assets/images/signupImg.jpg';
 
 const Container = styled.div`
   min-height: 100vh;
@@ -10,9 +10,12 @@ const Container = styled.div`
 `;
 
 const ImageWrapper = styled.section`
-  width: 540px;
+  width: 620px;
   margin: 0;
   padding: 0;
+  @media only screen and (max-width: 1080px) {
+    display: none;
+  }
 `;
 
 const Image = styled.img`
@@ -26,6 +29,15 @@ const Image = styled.img`
 const FormWrapper = styled.section`
   flex-grow: 1;
   padding: 5em 7em;
+  @media only screen and (max-width: 1280px) {
+    padding: 5em 9em 2em 9em;
+  }
+  @media only screen and (max-width: 1080px) {
+    padding: 2.5em 15% 2em 15%;
+  }
+  @media only screen and (max-width: 480px) {
+    padding: 1.05em 5% 2em 5%;
+  }
 `;
 
 const Header = styled.h1`
@@ -42,6 +54,9 @@ const SubHeader = styled.h3`
 const SignupDescription = styled.p`
   font-size: 0.9rem;
   color: #667d94;
+  @media only screen and (max-width: 1080px) {
+    max-width: 520px;
+  }
 `;
 
 const Link = styled(NavLink)`
