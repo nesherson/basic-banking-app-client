@@ -15,6 +15,9 @@ const ImageWrapper = styled.section`
   margin: 0;
   padding: 0;
   overflow: hidden;
+  @media only screen and (max-width: 880px) {
+    display: none;
+  }
 `;
 
 const Image = styled.img`
@@ -29,6 +32,12 @@ const Image = styled.img`
 const FormWrapper = styled.section`
   flex-grow: 1;
   padding: 2.5em 7em;
+  @media only screen and (max-width: 880px) {
+    padding: 2.5em 15% 2em 15%;
+  }
+  @media only screen and (max-width: 480px) {
+    padding: 1.05em 5% 2em 5%;
+  }
 `;
 
 const Header = styled.h1`

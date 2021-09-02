@@ -10,6 +10,13 @@ const FormWrapper = styled.div``;
 const Form = styled.form`
   max-width: 420px;
   min-width: 340px;
+  @media only screen and (max-width: 1080px) {
+    max-width: 520px;
+    min-width: 320px;
+  }
+  @media only screen and (max-width: 1080px) {
+    min-width: 280px;
+  }
 `;
 
 const FormColumn = styled.div`
