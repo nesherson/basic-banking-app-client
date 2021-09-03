@@ -35,7 +35,7 @@ async function postSignupUser({
 
 async function postLoginUser({ email, password }) {
   try {
-    const response = await fetch('http://localhost:5000/auth/signup', {
+    const response = await fetch('http://localhost:5000/auth/login', {
       method: 'POST',
       headers: {
         Accept: 'application/json',
