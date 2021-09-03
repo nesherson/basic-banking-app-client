@@ -102,7 +102,7 @@ const SignupForm = observer(() => {
       authStore.clearUserSignupStatus();
       history.replace(from);
     }
-  }, [history, from, authStore]);
+  }, [authStore, history, from]);
 
   return (
     <Form onSubmit={action(handleSubmit(onSubmit))} noValidate>

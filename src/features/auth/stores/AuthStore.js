@@ -1,43 +1,19 @@
-import { makeAutoObservable, runInAction, trace } from 'mobx';
+import { makeAutoObservable, runInAction } from 'mobx';
 import { createContext } from 'react';
 
-async function postSignupUser({
-  firstName,
-  lastName,
-  email,
-  country,
-  password,
-}) {
-  try {
-    const response = await fetch('http://localhost:5000/auth/signup', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        email,
-        country,
-        password,
-      }),
-    });
+import { postSignupUser, postLoginUser } from '../authApi/api';
 
-    const data = await response.json();
-
-    if (response.ok) {
-      return data;
-    }
-
-    throw new Error(data.error);
-  } catch (error) {
-    return error;
-  }
-}
+import { getLocalDateWithOffset } from '../../../util/date';
 
 class AuthStore {
   singupUserStatus = {
+    isFetching: false,
+    isSuccess: false,
+    isError: false,
+    errorMessage: '',
+  };
+
+  loginUserStatus = {
     isFetching: false,
     isSuccess: false,
     isError: false,
@@ -54,6 +30,15 @@ class AuthStore {
       this.singupUserStatus.isSuccess = false;
       this.singupUserStatus.isError = false;
       this.singupUserStatus.errorMessage = '';
+    });
+  }
+
+  clearUserLoginStatus() {
+    runInAction(() => {
+      this.loginUserStatus.isFetching = false;
+      this.loginUserStatus.isSuccess = false;
+      this.loginUserStatus.isError = false;
+      this.loginUserStatus.errorMessage = '';
     });
   }
 
@@ -75,6 +60,42 @@ class AuthStore {
         this.singupUserStatus.isSuccess = false;
         this.singupUserStatus.isError = true;
         this.singupUserStatus.errorMessage = error.message;
+      });
+    }
+  }
+
+  async loginUser(userLoginData) {
+    this.loginUserStatus.isFetching = true;
+    try {
+      const response = await postLoginUser(userLoginData);
+      if (response instanceof Error) {
+        throw new Error(response.message);
+      }
+
+      const oneHourExpirationTime = 3600000;
+      const tokenExpirationDate = new Date(
+        getLocalDateWithOffset().getTime() + oneHourExpirationTime
+      );
+
+      const userData = JSON.stringify({
+        userId: response.id,
+        token: response.token,
+        tokenExpirationDate,
+      });
+
+      localStorage.setItem('userData', userData);
+
+      runInAction(() => {
+        this.loginUserStatus.isFetching = false;
+        this.loginUserStatus.isSuccess = true;
+        this.loginUserStatus.isError = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.loginUserStatus.isFetching = false;
+        this.loginUserStatus.isSuccess = false;
+        this.loginUserStatus.isError = true;
+        this.loginUserStatus.errorMessage = error.message;
       });
     }
   }

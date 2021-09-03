@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
+import { action } from 'mobx';
+import { observer } from 'mobx-react-lite';
+import { useContext, useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router';
+
+import { AuthStoreContext } from '../stores/AuthStore';
 
 import { EMAIL_REGEXP } from '../../../constants/constants';
 
@@ -41,20 +47,43 @@ const Button = styled.button`
   box-sizing: border-box;
 `;
 
-function LoginForm() {
+const LoginForm = observer(() => {
+  const authStore = useContext(AuthStoreContext);
+  const history = useHistory();
+  const location = useLocation();
+
+  const { from } = location.state || { from: { pathname: '/dashboard' } };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    const values = {
+      email: data.email,
+      password: data.password,
+    };
+
+    authStore.loginUser(values);
   };
+
+  useEffect(() => {
+    if (authStore.loginUserStatus.isSuccess) reset();
+  }, [reset, authStore.loginUserStatus.isSuccess]);
+
+  useEffect(() => {
+    if (authStore.loginUserStatus.isSuccess) {
+      authStore.clearUserLoginStatus();
+      history.replace(from);
+    }
+  }, [authStore, history, from]);
 
   return (
     <FormWrapper>
-      <Form onSubmit={handleSubmit(onSubmit)} noValidate>
+      <Form onSubmit={action(handleSubmit(onSubmit))} noValidate>
         <FormColumn>
           <FormControl>
             <EmailInput
@@ -87,6 +116,6 @@ function LoginForm() {
       </Form>
     </FormWrapper>
   );
-}
+});
 
 export default LoginForm;
