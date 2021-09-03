@@ -44,7 +44,7 @@ function FirstNameInput({ label, name, register, required, errors }) {
   return (
     <>
       {label ? <StyledLabel>{label}</StyledLabel> : null}
-      <StyledInput innerMargin type={name} {...register(name, { required })} />
+      <StyledInput innerMargin type='text' {...register(name, { required })} />
       {errors.text?.type === 'required' ? (
         <Warning>First name is required.</Warning>
       ) : null}
@@ -56,7 +56,7 @@ function LastNameInput({ label, name, register, required, errors }) {
   return (
     <>
       {label ? <StyledLabel>{label}</StyledLabel> : null}
-      <StyledInput type={name} {...register(name, { required })} />
+      <StyledInput type='text' {...register(name, { required })} />
       {errors.text?.type === 'required' ? (
         <Warning>Last name is required.</Warning>
       ) : null}
@@ -70,7 +70,7 @@ function EmailInput({ label, name, register, required, pattern, errors }) {
       {label ? <StyledLabel>{label}</StyledLabel> : null}
       <StyledInput
         innerMargin
-        type={name}
+        type='email'
         {...register(name, { required, pattern })}
       />
       {errors.email?.type === 'required' ? (
@@ -87,7 +87,7 @@ function CountryInput({ label, name, register, required, errors }) {
   return (
     <>
       {label ? <StyledLabel>{label}</StyledLabel> : null}
-      <StyledInput type={name} {...register(name, { required })} />
+      <StyledInput type='text' {...register(name, { required })} />
       {errors.text?.type === 'required' ? (
         <Warning>Country is required.</Warning>
       ) : null}
@@ -101,7 +101,7 @@ function PasswordInput({ label, name, register, required, minLength, errors }) {
       {label ? <StyledLabel>{label}</StyledLabel> : null}
       <StyledInput
         innerMargin
-        type={name}
+        type='password'
         {...register(name, { required, minLength })}
       />
       {errors.password?.type === 'required' ? (
@@ -125,7 +125,10 @@ function PasswordConfirmInput({
   return (
     <>
       {label ? <StyledLabel>{label}</StyledLabel> : null}
-      <StyledInput type={name} {...register(name, { required, minLength })} />
+      <StyledInput
+        type='password'
+        {...register(name, { required, minLength })}
+      />
       {errors.password?.type === 'required' ? (
         <Warning>Password is required.</Warning>
       ) : null}
