@@ -1,5 +1,11 @@
 import styled from 'styled-components';
 import { useForm } from 'react-hook-form';
+import { action } from 'mobx';
+import { observer } from 'mobx-react-lite';
+import { useContext, useEffect } from 'react';
+import { useHistory, useLocation } from 'react-router';
+
+import { AuthStoreContext } from '../stores/AuthStore';
 
 import { EMAIL_REGEXP } from '../../../constants/constants';
 
@@ -57,24 +63,54 @@ const Button = styled.button`
   box-sizing: border-box;
 `;
 
-function SignupForm() {
+const Warning = styled.span`
+  font-size: 0.8rem;
+  color: #ff1a1a;
+`;
+
+const SignupForm = observer(() => {
+  const authStore = useContext(AuthStoreContext);
+  const history = useHistory();
+  const location = useLocation();
+
+  const { from } = location.state || { from: { pathname: '/login' } };
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    const values = {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: data.password,
+    };
+
+    authStore.signupUser(values);
   };
 
+  useEffect(() => {
+    if (authStore.singupUserStatus.isSuccess) reset();
+  }, [reset, authStore.singupUserStatus.isSuccess]);
+
+  useEffect(() => {
+    if (authStore.singupUserStatus.isSuccess) {
+      authStore.clearUserSignupStatus();
+      history.replace(from);
+    }
+  }, [history, from, authStore]);
+
   return (
-    <Form onSubmit={handleSubmit(onSubmit)} noValidate>
+    <Form onSubmit={action(handleSubmit(onSubmit))} noValidate>
       <FormColumn>
         <FormControl>
           <FirstNameInput
             label='First Name'
-            name='text'
+            name='firstName'
             register={register}
             required
             errors={errors}
@@ -83,7 +119,7 @@ function SignupForm() {
         <FormControl>
           <LastNameInput
             label='Last Name'
-            name='text'
+            name='lastName'
             register={register}
             required
             errors={errors}
@@ -104,7 +140,7 @@ function SignupForm() {
         <FormControl>
           <CountryInput
             label='Country'
-            name='text'
+            name='country'
             register={register}
             required
             errors={errors}
@@ -117,23 +153,18 @@ function SignupForm() {
             label='Password'
             name='password'
             register={register}
-            required
-            minLength={6}
             errors={errors}
           />
         </FormControl>
         <FormControl>
           <PasswordConfirmInput
             label='Confirm Password'
-            name='password'
+            name='passwordConfirm'
             register={register}
-            required
-            minLength={6}
             errors={errors}
           />
         </FormControl>
       </FormColumn>
-
       <CheckboxInput
         name='checkbox'
         register={register}
@@ -145,8 +176,11 @@ function SignupForm() {
           <Button type='submit'>Create Account</Button>
         </FormControl>
       </FormColumn>
+      {authStore.singupUserStatus.isError ? (
+        <Warning>{authStore.singupUserStatus.errorMessage}</Warning>
+      ) : null}
     </Form>
   );
-}
+});
 
 export default SignupForm;
