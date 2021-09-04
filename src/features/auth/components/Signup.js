@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 import SignupForm from './SignupForm';
-import Logo from './Logo';
+import Logo from '../../../components/Logo';
 import img from '../../../assets/images/signupImg.jpg';
 
 const Container = styled.div`
