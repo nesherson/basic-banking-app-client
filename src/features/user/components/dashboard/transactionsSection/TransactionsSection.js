@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Search } from 'react-feather';
 
 import Transaction from './Transaction';
+import PaymentDetails from './PaymentDetails';
 
 const Container = styled.section`
   flex: 1;
@@ -45,7 +46,38 @@ const TransactionList = styled.ul`
   list-style: none;
   margin: 0;
   padding: 0;
+  border-bottom: 1px solid rgba(33, 38, 44, 0.2);
+  & li:nth-of-type(odd) {
+    background-color: rgba(240, 242, 244, 0.4);
+  }
 `;
+
+const tempTransactions = [
+  {
+    timestamp: '2021-08-29 16:33:00+02',
+    type: 'deposit',
+    description: '',
+    amount: 570.0,
+  },
+  {
+    timestamp: '2021-08-29 17:33:00+02',
+    type: 'withdraw',
+    description: '',
+    amount: 100.0,
+  },
+  {
+    timestamp: '2021-08-29 18:33:00+02',
+    type: 'payment',
+    description: 'Have fun.',
+    amount: 150.0,
+  },
+  {
+    timestamp: '2021-08-29 19:33:00+02',
+    type: 'payment',
+    description: 'Spent it all.',
+    amount: 120.0,
+  },
+];
 
 function TransactionsSection() {
   return (
@@ -59,25 +91,25 @@ function TransactionsSection() {
         </Header>
         <Date>Mon, Mar 1</Date>
         <TransactionList>
-          <Transaction
-            time={'16:47'}
-            type={'deposit'}
-            description={''}
-            amount={570.0}
-          />
-          <Transaction
-            time={'17:47'}
-            type={'withdraw'}
-            description={''}
-            amount={70.0}
-          />
-          <Transaction
-            time={'18:47'}
-            type={'payment'}
-            description={'Have fun.'}
-            amount={150.0}
-          />
+          {tempTransactions.map((t) => {
+            const time = t.timestamp.slice(11, 16);
+            return (
+              <Transaction
+                time={time}
+                type={t.type}
+                description={t.description}
+                amount={t.amount}
+                selected={false}
+              />
+            );
+          })}
         </TransactionList>
+        <PaymentDetails
+          timestamp={tempTransactions[3].timestamp}
+          type={tempTransactions[3].type}
+          description={tempTransactions[3].description}
+          amount={tempTransactions[3].amount}
+        />
       </Transactions>
     </Container>
   );

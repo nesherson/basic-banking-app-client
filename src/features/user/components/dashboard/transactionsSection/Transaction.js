@@ -6,7 +6,7 @@ import {
   ChevronsLeft,
 } from 'react-feather';
 
-const Container = styled.div`
+const Container = styled.li`
   display: flex;
   align-items: center;
   width: 100%;
@@ -43,7 +43,7 @@ const Wrapper = styled.div`
 const TransactionType = styled.span`
   color: #161a1d;
   font-size: 1rem;
-  text-transform: uppercase;
+  text-transform: capitalize;
 `;
 
 const TransactionDescription = styled.p`
@@ -62,7 +62,7 @@ function Transaction({ time, type, description, amount }) {
   let typeIcon;
 
   if (type === 'deposit') typeIcon = <ChevronsDown />;
-  else if (type === 'withdraw') typeIcon = <ChevronsDown />;
+  else if (type === 'withdraw') typeIcon = <ChevronsUp />;
   else typeIcon = <ChevronsRight />;
 
   return (
