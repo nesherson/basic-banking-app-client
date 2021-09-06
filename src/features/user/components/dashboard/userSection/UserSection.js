@@ -1,6 +1,12 @@
 import styled from 'styled-components';
+import { observer } from 'mobx-react-lite';
+import { useContext, useEffect } from 'react';
+
+import { UserStoreContext } from '../../../stores/UserStore';
+import { CardStoreContext } from '../../../../card/stores/CardStore';
 
 import Card from './Card';
+import SecondCard from './SecondCard';
 
 const Container = styled.section`
   width: 840px;
@@ -23,8 +29,6 @@ const Headline = styled.h1`
   font-weight: 600;
   color: #161a1d;
 `;
-
-const DateWrapper = styled.div``;
 
 const Date = styled.p`
   text-align: center;
@@ -56,30 +60,61 @@ const StyledSpan = styled.span`
   font-weight: 600;
 `;
 
-function UserSection() {
+const Cards = styled.div`
+  display: flex;
+`;
+
+const UserSection = observer(() => {
+  const userStore = useContext(UserStoreContext);
+  const cardStore = useContext(CardStoreContext);
+
+  useEffect(() => {
+    const { userId, token } = JSON.parse(localStorage.getItem('userData'));
+    const values = {
+      id: userId,
+      token,
+    };
+    userStore.getUserData(values);
+  }, [userStore]);
+
+  useEffect(() => {
+    const { userId, token } = JSON.parse(localStorage.getItem('userData'));
+    const values = {
+      id: userId,
+      token,
+    };
+    cardStore.getCardDataByUsedId(values);
+  }, [cardStore]);
+
   return (
     <Container>
       <Header>
         <Headline>
           Welcome back,
           <br />
-          Fernando
+          {userStore.user.firstName}
         </Headline>
-        <DateWrapper>
-          <Date>
-            Sunday, September 5<br />
-            2021
-          </Date>
-        </DateWrapper>
+        <Date>
+          Sunday, September 5<br />
+          2021
+        </Date>
       </Header>
       <UserBalance>
         <BalanceText>Balance</BalanceText>
-        <BalanceNumber>12,560.50KM</BalanceNumber>
+        <BalanceNumber>{cardStore.card.balance}KM</BalanceNumber>
       </UserBalance>
       <StyledSpan>Applied Cards</StyledSpan>
-      <Card />
+      <Cards>
+        <Card
+          cardNumber={cardStore.card.cardNumber}
+          type={cardStore.card.type}
+          network={cardStore.card.network}
+          balance={cardStore.card.balance}
+        />
+        <SecondCard />
+      </Cards>
     </Container>
   );
-}
+});
 
 export default UserSection;
