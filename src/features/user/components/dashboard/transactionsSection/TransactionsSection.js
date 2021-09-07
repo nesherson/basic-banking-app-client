@@ -1,5 +1,12 @@
 import styled from 'styled-components';
 import { Search } from 'react-feather';
+import { observer } from 'mobx-react-lite';
+import { useState, useContext, useEffect } from 'react';
+
+import { TransactionsStoreContext } from '../../../../transactions/stores/TransactionsStore';
+import { CardStoreContext } from '../../../../card/stores/CardStore';
+
+import { parseEnum } from '../../../../../util/helpers';
 
 import Transaction from './Transaction';
 import PaymentDetails from './PaymentDetails';
@@ -47,39 +54,36 @@ const TransactionList = styled.ul`
   margin: 0;
   padding: 0;
   border-bottom: 1px solid rgba(33, 38, 44, 0.2);
-  & li:nth-of-type(odd) {
-    background-color: rgba(240, 242, 244, 0.4);
-  }
 `;
 
-const tempTransactions = [
-  {
-    timestamp: '2021-08-29 16:33:00+02',
-    type: 'deposit',
-    description: '',
-    amount: 570.0,
-  },
-  {
-    timestamp: '2021-08-29 17:33:00+02',
-    type: 'withdraw',
-    description: '',
-    amount: 100.0,
-  },
-  {
-    timestamp: '2021-08-29 18:33:00+02',
-    type: 'payment',
-    description: 'Have fun.',
-    amount: 150.0,
-  },
-  {
-    timestamp: '2021-08-29 19:33:00+02',
-    type: 'payment',
-    description: 'Spent it all.',
-    amount: 120.0,
-  },
-];
+const TransactionsSection = observer(() => {
+  const cardStore = useContext(CardStoreContext);
+  const transactionsStore = useContext(TransactionsStoreContext);
 
-function TransactionsSection() {
+  const transactions = transactionsStore.transactions;
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const handleTransactionSelect = (index) => {
+    setSelectedIndex(index);
+  };
+
+  const isSelected = (currentIndex) => {
+    return currentIndex === selectedIndex;
+  };
+
+  useEffect(() => {
+    if (cardStore.fetchCardDataStatus.isSuccess) {
+      const { token } = JSON.parse(localStorage.getItem('userData'));
+      const cardId = cardStore.card.id;
+      const values = {
+        cardId,
+        token,
+      };
+
+      transactionsStore.getLatestTransactions(values);
+    }
+  }, [transactionsStore, cardStore, cardStore.fetchCardDataStatus.isSuccess]);
+
   return (
     <Container>
       <Transactions>
@@ -91,28 +95,34 @@ function TransactionsSection() {
         </Header>
         <Date>Mon, Mar 1</Date>
         <TransactionList>
-          {tempTransactions.map((t) => {
-            const time = t.timestamp.slice(11, 16);
+          {transactions.map((t, index) => {
+            const time = t.capturedAt.slice(11, 16);
+            const method = parseEnum(t.method);
             return (
               <Transaction
+                key={t.id}
                 time={time}
-                type={t.type}
+                method={method}
                 description={t.description}
                 amount={t.amount}
-                selected={false}
+                selected={isSelected(index)}
+                handleSelected={() => handleTransactionSelect(index)}
               />
             );
           })}
         </TransactionList>
-        <PaymentDetails
-          timestamp={tempTransactions[3].timestamp}
-          type={tempTransactions[3].type}
-          description={tempTransactions[3].description}
-          amount={tempTransactions[3].amount}
-        />
+        {transactionsStore.fetchLatestTransactionsStatus.isSuccess ? (
+          <PaymentDetails
+            createdAt={transactions[selectedIndex].createdAt}
+            from={transactions[selectedIndex].senderCardNum}
+            method={parseEnum(transactions[selectedIndex].method)}
+            description={transactions[selectedIndex].description}
+            amount={transactions[selectedIndex].amount}
+          />
+        ) : null}
       </Transactions>
     </Container>
   );
-}
+});
 
 export default TransactionsSection;

@@ -63,9 +63,12 @@ const Date = styled.span`
   color: #7b8c9d;
 `;
 
-function PaymentDetails({ timestamp, type, description, amount }) {
-  const time = timestamp.slice(11, 16);
-  const date = timestamp.slice(0, 10);
+function PaymentDetails({ createdAt, from, method, description, amount }) {
+  const time = createdAt.slice(11, 16);
+  const date = createdAt.slice(0, 10);
+
+  const isPayment = method === 'payment' ? true : false;
+
   return (
     <Container>
       <Header>
@@ -78,12 +81,18 @@ function PaymentDetails({ timestamp, type, description, amount }) {
         <LeftSide>
           <Wrapper>
             <Label>From</Label>
-            <StyledSpan>{type === 'payment' ? 'Payment From' : '-'}</StyledSpan>
+            <StyledSpan>{isPayment ? from : '-'}</StyledSpan>
           </Wrapper>
           <Wrapper>
-            <Label>Type</Label>
-            <StyledSpan>{type}</StyledSpan>
+            <Label>Method</Label>
+            <StyledSpan>{method}</StyledSpan>
           </Wrapper>
+          {isPayment ? (
+            <Wrapper>
+              <Label>Description</Label>
+              <StyledSpan>{description}</StyledSpan>
+            </Wrapper>
+          ) : null}
         </LeftSide>
         <RightSide>
           <Amount>{amount}</Amount>
