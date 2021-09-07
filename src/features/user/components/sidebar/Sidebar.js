@@ -11,7 +11,6 @@ const Aside = styled.aside`
   background-color: #16171b;
   display: flex;
   flex-direction: column;
-  //padding: 0.15em 0.2em 0 1.25em;
 `;
 
 const LogoWrapper = styled.div`

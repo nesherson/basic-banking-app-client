@@ -13,6 +13,8 @@ const Container = styled.li`
   box-sizing: border-box;
   padding: 0.2em 3.5em;
   height: 100px;
+  background-color: ${(props) =>
+    props.selected ? 'rgba(211, 216, 222, 0.5)' : ''};
 `;
 
 const Time = styled.span`
@@ -40,7 +42,7 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-const TransactionType = styled.span`
+const TransactionMethod = styled.span`
   color: #161a1d;
   font-size: 1rem;
   text-transform: capitalize;
@@ -58,20 +60,27 @@ const TransactionAmount = styled.span`
   margin-left: auto;
 `;
 
-function Transaction({ time, type, description, amount }) {
-  let typeIcon;
+function Transaction({
+  time,
+  method,
+  description,
+  amount,
+  handleSelected,
+  selected,
+}) {
+  let methodIcon;
 
-  if (type === 'deposit') typeIcon = <ChevronsDown />;
-  else if (type === 'withdraw') typeIcon = <ChevronsUp />;
-  else typeIcon = <ChevronsRight />;
+  if (method === 'deposit') methodIcon = <ChevronsDown />;
+  else if (method === 'withdraw') methodIcon = <ChevronsUp />;
+  else methodIcon = <ChevronsRight />;
 
   return (
-    <Container>
+    <Container onClick={handleSelected} selected={selected}>
       <Time>{time}</Time>
-      <Icon>{typeIcon}</Icon>
+      <Icon>{methodIcon}</Icon>
       <Wrapper>
-        <TransactionType>{type}</TransactionType>
-        {type === 'payment' ? (
+        <TransactionMethod>{method}</TransactionMethod>
+        {method === 'payment' ? (
           <TransactionDescription>{description}</TransactionDescription>
         ) : null}
       </Wrapper>

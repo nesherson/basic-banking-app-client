@@ -1,4 +1,4 @@
-async function fetchCardDataByUsedId({ id, token }) {
+async function fetchCardData({ id, token }) {
   try {
     const response = await fetch(`http://localhost:5000/cards/user/${id}`, {
       method: 'GET',
@@ -21,4 +21,4 @@ async function fetchCardDataByUsedId({ id, token }) {
   }
 }
 
-export { fetchCardDataByUsedId };
+export { fetchCardData };

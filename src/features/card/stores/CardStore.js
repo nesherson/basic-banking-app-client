@@ -1,7 +1,7 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { createContext } from 'react';
 
-import { fetchCardDataByUsedId } from '../cardApi/api';
+import { fetchCardData } from '../cardApi/api';
 
 class CardStore {
   card = {
@@ -32,10 +32,10 @@ class CardStore {
     });
   }
 
-  async getCardDataByUsedId(id) {
+  async getCardData(authData) {
     this.fetchCardDataStatus.isFetching = true;
     try {
-      const response = await fetchCardDataByUsedId(id);
+      const response = await fetchCardData(authData);
       if (response instanceof Error) {
         throw new Error(response.message);
       }

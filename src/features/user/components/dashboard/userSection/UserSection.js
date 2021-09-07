@@ -83,7 +83,7 @@ const UserSection = observer(() => {
       id: userId,
       token,
     };
-    cardStore.getCardDataByUsedId(values);
+    cardStore.getCardData(values);
   }, [cardStore]);
 
   return (
