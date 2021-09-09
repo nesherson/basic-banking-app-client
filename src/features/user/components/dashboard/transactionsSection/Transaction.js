@@ -15,6 +15,9 @@ const Container = styled.li`
   height: 100px;
   background-color: ${(props) =>
     props.selected ? 'rgba(211, 216, 222, 0.5)' : ''};
+  @media only screen and (max-width: 1599px) {
+    padding: 0.2em 1.5em;
+  }
 `;
 
 const Time = styled.span`

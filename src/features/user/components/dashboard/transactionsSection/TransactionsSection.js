@@ -15,14 +15,13 @@ const Container = styled.section`
   flex: 1;
   background-color: #fff;
   box-sizing: border-box;
+  min-width: 500px;
+  @media only screen and (max-width: 1599px) {
+  }
 `;
 
 const Transactions = styled.div`
   //padding: 2em 3em;
-`;
-
-const TransactionDetails = styled.div`
-  padding: 2em 3em;
 `;
 
 const Header = styled.header`
@@ -31,6 +30,9 @@ const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 2em 3.5em 0 3.5em;
+  @media only screen and (max-width: 1599px) {
+    padding: 2em 1.5em 0 1.5em;
+  }
 `;
 
 const Headline = styled.h3`
@@ -47,6 +49,9 @@ const Date = styled.p`
   font-size: 0.95rem;
   color: #7b8c9d;
   padding: 0 3.5em;
+  @media only screen and (max-width: 1599px) {
+    padding: 0 1.5em;
+  }
 `;
 
 const TransactionList = styled.ul`
