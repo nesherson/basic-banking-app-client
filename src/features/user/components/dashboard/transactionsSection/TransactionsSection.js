@@ -15,14 +15,19 @@ const Container = styled.section`
   flex: 1;
   background-color: #fff;
   box-sizing: border-box;
-  min-width: 500px;
+  min-width: 660px;
   @media only screen and (max-width: 1599px) {
+    min-width: 490px;
+  }
+  @media only screen and (max-width: 1320px) {
+    min-width: 420px;
+  }
+  @media only screen and (max-width: 890px) {
+    display: none;
   }
 `;
 
-const Transactions = styled.div`
-  //padding: 2em 3em;
-`;
+const Transactions = styled.div``;
 
 const Header = styled.header`
   margin-bottom: 2.5em;

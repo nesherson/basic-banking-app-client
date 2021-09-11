@@ -3,6 +3,9 @@ import { MoreVertical as More } from 'react-feather';
 
 const Container = styled.div`
   padding: 2em 3.5em;
+  @media only screen and (max-width: 1599px) {
+    padding: 2em 1.5em;
+  }
 `;
 
 const Header = styled.header`

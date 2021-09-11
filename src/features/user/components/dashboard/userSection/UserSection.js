@@ -13,6 +13,12 @@ const Container = styled.section`
   box-sizing: border-box;
   background-color: #f0f2f4;
   padding: 2em 3.5em;
+  @media only screen and (max-width: 1599px) {
+    padding: 2em 1.5em;
+  }
+  @media only screen and (max-width: 890px) {
+    width: 100%;
+  }
 `;
 
 const Header = styled.header`
@@ -62,6 +68,9 @@ const StyledSpan = styled.span`
 
 const Cards = styled.div`
   display: flex;
+  @media only screen and (max-width: 1320px) {
+    flex-wrap: wrap;
+  }
 `;
 
 const UserSection = observer(() => {

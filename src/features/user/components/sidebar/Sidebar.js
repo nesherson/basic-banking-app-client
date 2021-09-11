@@ -11,6 +11,9 @@ const Aside = styled.aside`
   background-color: #16171b;
   display: flex;
   flex-direction: column;
+  @media only screen and (max-width: 1320px) {
+    display: none;
+  }
 `;
 
 const LogoWrapper = styled.div`
