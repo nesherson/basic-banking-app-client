@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import {
   ChevronsUp,
   ChevronsDown,
@@ -13,10 +13,23 @@ const Container = styled.li`
   box-sizing: border-box;
   padding: 0.2em 3.5em;
   height: 100px;
-  background-color: ${(props) =>
-    props.selected ? 'rgba(211, 216, 222, 0.5)' : ''};
+  transition: padding 0.2s;
+  ${(props) =>
+    props.selected
+      ? css`
+          background-color: rgba(211, 216, 222, 0.5);
+          padding: 0.2em 2.8em;
+        `
+      : ''};
+
   @media only screen and (max-width: 1599px) {
     padding: 0.2em 1.5em;
+    ${(props) =>
+      props.selected
+        ? css`
+            padding: 0.2em 1.1em;
+          `
+        : ''};
   }
 `;
 
@@ -46,7 +59,8 @@ const Wrapper = styled.div`
 `;
 
 const TransactionMethod = styled.span`
-  color: #161a1d;
+  //color: #161a1d;
+  color: ${(props) => (props.method === 'withdraw' ? '#ff6666' : '#161a1d')};
   font-size: 1rem;
   text-transform: capitalize;
 `;
@@ -82,7 +96,7 @@ function Transaction({
       <Time>{time}</Time>
       <Icon>{methodIcon}</Icon>
       <Wrapper>
-        <TransactionMethod>{method}</TransactionMethod>
+        <TransactionMethod method={method}>{method}</TransactionMethod>
         {method === 'payment' ? (
           <TransactionDescription>{description}</TransactionDescription>
         ) : null}
