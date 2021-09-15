@@ -17,7 +17,7 @@ const Container = styled.li`
   ${(props) =>
     props.selected
       ? css`
-          background-color: rgba(211, 216, 222, 0.5);
+          background-color: #373f49;
           padding: 0.2em 2.8em;
         `
       : ''};
@@ -34,7 +34,7 @@ const Container = styled.li`
 `;
 
 const Time = styled.span`
-  color: #7b8c9d;
+  color: ${(props) => (props.selected ? '#fff' : '#7b8c9d')};
   font-size: 0.95rem;
   margin-right: 1.75em;
 `;
@@ -59,7 +59,14 @@ const Wrapper = styled.div`
 `;
 
 const TransactionMethod = styled.span`
-  color: ${(props) => (props.method === 'withdraw' ? '#ff6666' : '#161a1d')};
+  color: ${(props) =>
+    props.selected && props.method === 'withdraw'
+      ? '#ff6666'
+      : props.selected
+      ? '#fff'
+      : props.method === 'withdraw'
+      ? '#ff6666'
+      : ''};
   font-size: 1rem;
   text-transform: capitalize;
 `;
@@ -67,11 +74,11 @@ const TransactionMethod = styled.span`
 const TransactionDescription = styled.p`
   margin: 0;
   font-size: 0.85rem;
-  color: #7b8c9d;
+  color: ${(props) => (props.selected ? '#c4ccd4' : '#7b8c9d')};
 `;
 
 const TransactionAmount = styled.span`
-  color: #161a1d;
+  color: ${(props) => (props.selected ? '#fff' : '#161a1d')};
   font-size: 1rem;
   margin-left: auto;
 `;
@@ -96,15 +103,19 @@ function Transaction({
 
   return (
     <Container onClick={handleSelected} selected={selected}>
-      <Time>{time}</Time>
+      <Time selected={selected}>{time}</Time>
       <Icon>{methodIcon}</Icon>
       <Wrapper>
-        <TransactionMethod method={method}>{method}</TransactionMethod>
+        <TransactionMethod selected={selected} method={method}>
+          {method}
+        </TransactionMethod>
         {method === 'payment' ? (
-          <TransactionDescription>{description}</TransactionDescription>
+          <TransactionDescription selected={selected}>
+            {description}
+          </TransactionDescription>
         ) : null}
       </Wrapper>
-      <TransactionAmount>{amount}KM</TransactionAmount>
+      <TransactionAmount selected={selected}>{amount}KM</TransactionAmount>
     </Container>
   );
 }
