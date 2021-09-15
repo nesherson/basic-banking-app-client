@@ -1,11 +1,21 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import { createContext } from 'react';
 
-import { fetchLatestTransactions } from '../transactionsApi/api';
+import {
+  fetchLatestTransactions,
+  fetchLastMonthTransactions,
+} from '../transactionsApi/api';
 
 class TransactionsStore {
-  transactions = [];
+  latestTransactions = [];
+  lastMonthTransactions = [];
   fetchLatestTransactionsStatus = {
+    isFetching: false,
+    isSuccess: false,
+    isError: false,
+    errorMessage: '',
+  };
+  fetchLastMonthTransactionsStatus = {
     isFetching: false,
     isSuccess: false,
     isError: false,
@@ -25,6 +35,15 @@ class TransactionsStore {
     });
   }
 
+  clearFetchLastMonthTransactionsStatus() {
+    runInAction(() => {
+      this.fetchLastMonthTransactionsStatus.isFetching = false;
+      this.fetchLastMonthTransactionsStatus.isSuccess = false;
+      this.fetchLastMonthTransactionsStatus.isError = false;
+      this.fetchLastMonthTransactionsStatus.errorMessage = '';
+    });
+  }
+
   async getLatestTransactions(authData) {
     this.fetchLatestTransactionsStatus.isFetching = true;
     try {
@@ -33,7 +52,7 @@ class TransactionsStore {
         throw new Error(response.message);
       }
       runInAction(() => {
-        this.transactions = response;
+        this.latestTransactions = response;
 
         this.fetchLatestTransactionsStatus.isFetching = false;
         this.fetchLatestTransactionsStatus.isSuccess = true;
@@ -45,6 +64,30 @@ class TransactionsStore {
         this.fetchLatestTransactionsStatus.isSuccess = false;
         this.fetchLatestTransactionsStatus.isError = true;
         this.fetchLatestTransactionsStatus.errorMessage = error.message;
+      });
+    }
+  }
+
+  async getLastMonthTransactions(authData) {
+    this.fetchLastMonthTransactionsStatus.isFetching = true;
+    try {
+      const response = await fetchLastMonthTransactions(authData);
+      if (response instanceof Error) {
+        throw new Error(response.message);
+      }
+      runInAction(() => {
+        this.lastMonthTransactions = response;
+
+        this.fetchLastMonthTransactionsStatus.isFetching = false;
+        this.fetchLastMonthTransactionsStatus.isSuccess = true;
+        this.fetchLastMonthTransactionsStatus.isError = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.fetchLastMonthTransactionsStatus.isFetching = false;
+        this.fetchLastMonthTransactionsStatus.isSuccess = false;
+        this.fetchLastMonthTransactionsStatus.isError = true;
+        this.fetchLastMonthTransactionsStatus.errorMessage = error.message;
       });
     }
   }
