@@ -31,7 +31,7 @@ const TransactionsNum = styled.div`
   text-transform: uppercase;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #7b8c9d;
+  color: #627384;
   border-right: 1px solid rgba(33, 38, 44, 0.2);
 `;
 
@@ -45,7 +45,7 @@ const TotalSpent = styled.div`
   text-transform: uppercase;
   font-size: 0.95rem;
   font-weight: 600;
-  color: #7b8c9d;
+  color: #627384;
 `;
 
 const Span = styled.span`
