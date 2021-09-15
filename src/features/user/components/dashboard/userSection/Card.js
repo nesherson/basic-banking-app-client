@@ -84,10 +84,9 @@ const CardType = styled.span`
 
 function Card({ cardNumber, type, network, balance }) {
   const trimmedCardNumber = cardNumber.slice(
-    cardNumber.length - 5,
-    cardNumber.length - 1
+    cardNumber.length - 4,
+    cardNumber.length
   );
-
   return (
     <MainContainer>
       <CardContainer>

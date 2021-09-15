@@ -59,7 +59,6 @@ const Wrapper = styled.div`
 `;
 
 const TransactionMethod = styled.span`
-  //color: #161a1d;
   color: ${(props) => (props.method === 'withdraw' ? '#ff6666' : '#161a1d')};
   font-size: 1rem;
   text-transform: capitalize;
@@ -82,6 +81,7 @@ function Transaction({
   method,
   description,
   amount,
+  isSending,
   handleSelected,
   selected,
 }) {
@@ -89,7 +89,10 @@ function Transaction({
 
   if (method === 'deposit') methodIcon = <ChevronsDown />;
   else if (method === 'withdraw') methodIcon = <ChevronsUp />;
-  else methodIcon = <ChevronsRight />;
+  else if (method === 'payment') {
+    if (isSending) methodIcon = <ChevronsRight />;
+    else methodIcon = <ChevronsLeft />;
+  }
 
   return (
     <Container onClick={handleSelected} selected={selected}>

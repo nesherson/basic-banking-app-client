@@ -70,7 +70,7 @@ const TransactionsSection = observer(() => {
   const cardStore = useContext(CardStoreContext);
   const transactionsStore = useContext(TransactionsStoreContext);
 
-  const transactions = transactionsStore.transactions;
+  const latestTransactions = transactionsStore.latestTransactions;
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleTransactionSelect = (index) => {
@@ -105,29 +105,37 @@ const TransactionsSection = observer(() => {
         </Header>
         <Date>Mon, Mar 1</Date>
         <TransactionList>
-          {transactions.map((t, index) => {
-            const time = t.capturedAt.slice(11, 16);
-            const method = parseEnum(t.method);
-            return (
-              <Transaction
-                key={t.id}
-                time={time}
-                method={method}
-                description={t.description}
-                amount={t.amount}
-                selected={isSelected(index)}
-                handleSelected={() => handleTransactionSelect(index)}
-              />
-            );
-          })}
+          {latestTransactions
+            ? latestTransactions.map((t, index) => {
+                const time = t.capturedAt.slice(11, 16);
+                const method = parseEnum(t.method);
+                const isSendingMoney =
+                  t.senderCardNum === cardStore.card.cardNumber ? true : false;
+
+                return (
+                  <Transaction
+                    key={t.id}
+                    time={time}
+                    sender={t.senderCardNum}
+                    to={t.receiverCardNum}
+                    method={method}
+                    description={t.description}
+                    amount={t.amount}
+                    isSending={isSendingMoney}
+                    selected={isSelected(index)}
+                    handleSelected={() => handleTransactionSelect(index)}
+                  />
+                );
+              })
+            : null}
         </TransactionList>
         {transactionsStore.fetchLatestTransactionsStatus.isSuccess ? (
           <PaymentDetails
-            createdAt={transactions[selectedIndex].createdAt}
-            from={transactions[selectedIndex].senderCardNum}
-            method={parseEnum(transactions[selectedIndex].method)}
-            description={transactions[selectedIndex].description}
-            amount={transactions[selectedIndex].amount}
+            createdAt={latestTransactions[selectedIndex].createdAt}
+            from={latestTransactions[selectedIndex].senderCardNum}
+            method={parseEnum(latestTransactions[selectedIndex].method)}
+            description={latestTransactions[selectedIndex].description}
+            amount={latestTransactions[selectedIndex].amount}
           />
         ) : null}
       </Transactions>
