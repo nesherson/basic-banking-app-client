@@ -110,7 +110,7 @@ const LoginForm = observer(() => {
         </FormColumn>
         <FormColumn>
           <FormControl>
-            <Button type='submit'>Create Account</Button>
+            <Button type='submit'>Log in</Button>
           </FormControl>
         </FormColumn>
       </Form>
