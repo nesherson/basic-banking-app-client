@@ -1,3 +1,5 @@
+import { compareAsc, formatISO, isEqual, lightFormat } from 'date-fns';
+
 const transactionMethods = {
   0: 'deposit',
   1: 'withdraw',
@@ -8,4 +10,39 @@ function parseEnum(methodIndex) {
   return transactionMethods[methodIndex];
 }
 
-export { parseEnum };
+function mapTransactionsByDate(transactions) {
+  const tempTransactions = [...transactions];
+  const mappedTransactions = [];
+
+  for (let i = 0; i < tempTransactions.length; i++) {
+    let current;
+    let tempArr = [];
+
+    if (tempTransactions[i] === null) continue;
+    else current = tempTransactions[i];
+    for (let j = 0; j < tempTransactions.length; j++) {
+      if (tempTransactions[j] === null) continue;
+      const tempCurrentDate = new Date(
+        lightFormat(new Date(current.createdAt.slice(0, 10)), 'yyyy-MM-dd')
+      );
+
+      const tempTransactionDate = new Date(
+        lightFormat(
+          new Date(tempTransactions[j].createdAt.slice(0, 10)),
+          'yyyy-MM-dd'
+        )
+      );
+
+      if (isEqual(tempCurrentDate, tempTransactionDate)) {
+        tempArr.push(tempTransactions[j]);
+        tempTransactions[j] = null;
+      }
+    }
+
+    mappedTransactions.push(tempArr);
+  }
+
+  return mappedTransactions;
+}
+
+export { parseEnum, mapTransactionsByDate };
