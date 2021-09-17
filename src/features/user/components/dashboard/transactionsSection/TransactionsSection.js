@@ -75,10 +75,12 @@ const TransactionsSection = observer(() => {
   const transactionsStore = useContext(TransactionsStoreContext);
 
   const latestTransactions = transactionsStore.latestTransactions;
-  const tempDate = parseStrDateToLocaleDate(
-    latestTransactions[0].createdAt,
-    dateOptions.noWeekDay
-  );
+  const tempDate = transactionsStore.fetchLatestTransactionsStatus.isSuccess
+    ? parseStrDateToLocaleDate(
+        latestTransactions[0].createdAt,
+        dateOptions.noWeekDay
+      )
+    : null;
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleTransactionSelect = (index) => {

@@ -3,7 +3,7 @@ import { useState, useContext, useEffect } from 'react';
 import { observer } from 'mobx-react-lite';
 
 import { CardStoreContext } from '../../../card/stores/CardStore';
-import { TransactionsStoreContext } from '../../../transactions/stores/TransactionsStore';
+import { TransactionsStoreContext } from '../../stores/TransactionsStore';
 
 import { parseEnum } from '../../../../util/helpers';
 
