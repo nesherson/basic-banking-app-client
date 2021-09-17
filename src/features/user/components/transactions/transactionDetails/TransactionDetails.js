@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import { MoreVertical as More } from 'react-feather';
 
+import {
+  parseStrDateToLocaleDate,
+  dateOptions,
+} from '../../../../../util/date';
+
 const Container = styled.section`
   grid-column: 2 / 3;
   grid-row: 2 / 5;
@@ -36,6 +41,7 @@ const LeftSide = styled.div``;
 const RightSide = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-evenly;
 `;
 
 const Wrapper = styled.div`
@@ -63,6 +69,13 @@ const Amount = styled.span`
 
 const Date = styled.span`
   display: block;
+  width: 95px;
+  font-size: 0.9rem;
+  color: #7b8c9d;
+`;
+
+const Time = styled.span`
+  display: block;
   font-size: 0.9rem;
   color: #7b8c9d;
 `;
@@ -76,7 +89,10 @@ function TransactionDetails({
   amount,
 }) {
   const time = createdAt.slice(11, 16);
-  const date = createdAt.slice(0, 10);
+  const date = parseStrDateToLocaleDate(
+    createdAt.slice(0, 10),
+    dateOptions.default
+  );
 
   const isPayment = method === 'payment' ? true : false;
 
@@ -111,11 +127,8 @@ function TransactionDetails({
         </LeftSide>
         <RightSide>
           <Amount>{amount}</Amount>
-          <Date>
-            {time}
-            <br />
-            {date}
-          </Date>
+          <Time>{time}</Time>
+          <Date>{date}</Date>
         </RightSide>
       </Details>
     </Container>

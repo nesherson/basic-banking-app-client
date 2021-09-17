@@ -5,6 +5,8 @@ import { useContext, useEffect } from 'react';
 import { UserStoreContext } from '../../../stores/UserStore';
 import { CardStoreContext } from '../../../../card/stores/CardStore';
 
+import { parseStrDateToLocaleDate } from '../../../../../util/date';
+
 import Card from './Card';
 import SecondCard from './SecondCard';
 
@@ -12,7 +14,7 @@ const Container = styled.section`
   width: 840px;
   box-sizing: border-box;
   background-color: #f0f2f4;
-  padding: 2em 3.5em;
+  padding: 1.5em 3.5em;
   @media only screen and (max-width: 1599px) {
     padding: 2em 1.5em;
   }
@@ -36,7 +38,8 @@ const Headline = styled.h1`
   color: #161a1d;
 `;
 
-const Date = styled.p`
+const StyledDate = styled.p`
+  width: 120px;
   text-align: center;
   font-size: 1.45rem;
   color: #7b8c9d;
@@ -77,6 +80,8 @@ const UserSection = observer(() => {
   const userStore = useContext(UserStoreContext);
   const cardStore = useContext(CardStoreContext);
 
+  const currentDate = parseStrDateToLocaleDate(new Date(Date.now()));
+
   useEffect(() => {
     const { userId, token } = JSON.parse(localStorage.getItem('userData'));
     const values = {
@@ -103,10 +108,7 @@ const UserSection = observer(() => {
           <br />
           {userStore.user.firstName}
         </Headline>
-        <Date>
-          Sunday, September 5<br />
-          2021
-        </Date>
+        <StyledDate>{currentDate}</StyledDate>
       </Header>
       <UserBalance>
         <BalanceText>Balance</BalanceText>

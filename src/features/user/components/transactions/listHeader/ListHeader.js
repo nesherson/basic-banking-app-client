@@ -4,10 +4,9 @@ const Container = styled.div`
   grid-column: 1 / 2;
   grid-row: 3 / 4;
   display: flex;
-  //justify-content: space-evenly;
   align-items: center;
   border-bottom: 2px solid #161a1d;
-  margin: 0 3.5em;
+  margin: 0 3.5em 0.5em 3.5em;
 `;
 
 const Date = styled.span`

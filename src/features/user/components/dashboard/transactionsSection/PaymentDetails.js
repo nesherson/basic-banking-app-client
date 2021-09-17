@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 import { MoreVertical as More } from 'react-feather';
 
+import {
+  parseStrDateToLocaleDate,
+  dateOptions,
+} from '../../../../../util/date';
+
 const Container = styled.div`
   padding: 2em 3.5em;
   @media only screen and (max-width: 1599px) {
@@ -62,13 +67,18 @@ const Amount = styled.span`
 
 const Date = styled.span`
   display: block;
+  width: 95px;
+
   font-size: 0.9rem;
   color: #7b8c9d;
 `;
 
 function PaymentDetails({ createdAt, from, method, description, amount }) {
   const time = createdAt.slice(11, 16);
-  const date = createdAt.slice(0, 10);
+  const date = parseStrDateToLocaleDate(
+    createdAt.slice(0, 10),
+    dateOptions.noWeekDay
+  );
 
   const isPayment = method === 'payment' ? true : false;
 

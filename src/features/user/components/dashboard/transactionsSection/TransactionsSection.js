@@ -7,6 +7,10 @@ import { TransactionsStoreContext } from '../../../../transactions/stores/Transa
 import { CardStoreContext } from '../../../../card/stores/CardStore';
 
 import { parseEnum } from '../../../../../util/helpers';
+import {
+  parseStrDateToLocaleDate,
+  dateOptions,
+} from '../../../../../util/date';
 
 import Transaction from './Transaction';
 import PaymentDetails from './PaymentDetails';
@@ -71,6 +75,10 @@ const TransactionsSection = observer(() => {
   const transactionsStore = useContext(TransactionsStoreContext);
 
   const latestTransactions = transactionsStore.latestTransactions;
+  const tempDate = parseStrDateToLocaleDate(
+    latestTransactions[0].createdAt,
+    dateOptions.noWeekDay
+  );
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleTransactionSelect = (index) => {
@@ -103,7 +111,7 @@ const TransactionsSection = observer(() => {
             <Search size={20} />
           </Icon>
         </Header>
-        <Date>Mon, Mar 1</Date>
+        <Date>{tempDate}</Date>
         <TransactionList>
           {latestTransactions
             ? latestTransactions.map((t, index) => {
@@ -111,7 +119,6 @@ const TransactionsSection = observer(() => {
                 const method = parseEnum(t.method);
                 const isSendingMoney =
                   t.senderCardNum === cardStore.card.cardNumber ? true : false;
-
                 return (
                   <Transaction
                     key={t.id}
