@@ -50,4 +50,68 @@ async function fetchLastMonthTransactions({ cardId, token }) {
   }
 }
 
-export { fetchLatestTransactions, fetchLastMonthTransactions };
+async function postNewDeposit({ cardId, token, amount }) {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/transactions/card/${cardId}/deposit`,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          cardId,
+          amount,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    }
+
+    throw new Error(data.error);
+  } catch (error) {
+    return error;
+  }
+}
+
+async function postNewWithdraw({ cardId, token, amount }) {
+  try {
+    const response = await fetch(
+      `http://localhost:5000/transactions/withdraw`,
+      {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          cardId,
+          amount,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (response.ok) {
+      return data;
+    }
+
+    throw new Error(data.error);
+  } catch (error) {
+    return error;
+  }
+}
+export {
+  fetchLatestTransactions,
+  fetchLastMonthTransactions,
+  postNewDeposit,
+  postNewWithdraw,
+};
