@@ -4,6 +4,8 @@ import { createContext } from 'react';
 import {
   fetchLatestTransactions,
   fetchLastMonthTransactions,
+  postNewDeposit,
+  postNewWithdraw,
 } from '../transactionsApi/api';
 
 class TransactionsStore {
@@ -16,6 +18,18 @@ class TransactionsStore {
     errorMessage: '',
   };
   fetchLastMonthTransactionsStatus = {
+    isFetching: false,
+    isSuccess: false,
+    isError: false,
+    errorMessage: '',
+  };
+  postNewDepositStatus = {
+    isFetching: false,
+    isSuccess: false,
+    isError: false,
+    errorMessage: '',
+  };
+  postNewWithdrawStatus = {
     isFetching: false,
     isSuccess: false,
     isError: false,
@@ -36,6 +50,24 @@ class TransactionsStore {
   }
 
   clearFetchLastMonthTransactionsStatus() {
+    runInAction(() => {
+      this.fetchLastMonthTransactionsStatus.isFetching = false;
+      this.fetchLastMonthTransactionsStatus.isSuccess = false;
+      this.fetchLastMonthTransactionsStatus.isError = false;
+      this.fetchLastMonthTransactionsStatus.errorMessage = '';
+    });
+  }
+
+  clearPostNewDepositStatus() {
+    runInAction(() => {
+      this.fetchLastMonthTransactionsStatus.isFetching = false;
+      this.fetchLastMonthTransactionsStatus.isSuccess = false;
+      this.fetchLastMonthTransactionsStatus.isError = false;
+      this.fetchLastMonthTransactionsStatus.errorMessage = '';
+    });
+  }
+
+  clearPostNewWithdrawtStatus() {
     runInAction(() => {
       this.fetchLastMonthTransactionsStatus.isFetching = false;
       this.fetchLastMonthTransactionsStatus.isSuccess = false;
@@ -88,6 +120,50 @@ class TransactionsStore {
         this.fetchLastMonthTransactionsStatus.isSuccess = false;
         this.fetchLastMonthTransactionsStatus.isError = true;
         this.fetchLastMonthTransactionsStatus.errorMessage = error.message;
+      });
+    }
+  }
+
+  async makeNewDeposit(transactionData) {
+    this.postNewDepositStatus.isFetching = true;
+    try {
+      const response = await postNewDeposit(transactionData);
+      if (response instanceof Error) {
+        throw new Error(response.message);
+      }
+      runInAction(() => {
+        this.postNewDepositStatus.isFetching = false;
+        this.postNewDepositStatus.isSuccess = true;
+        this.postNewDepositStatus.isError = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.postNewDepositStatus.isFetching = false;
+        this.postNewDepositStatus.isSuccess = false;
+        this.postNewDepositStatus.isError = true;
+        this.postNewDepositStatus.errorMessage = error.message;
+      });
+    }
+  }
+
+  async makeNewWithdraw(transactionData) {
+    this.postNewWithdrawStatus.isFetching = true;
+    try {
+      const response = await postNewWithdraw(transactionData);
+      if (response instanceof Error) {
+        throw new Error(response.message);
+      }
+      runInAction(() => {
+        this.postNewWithdrawStatus.isFetching = false;
+        this.postNewWithdrawStatus.isSuccess = true;
+        this.postNewWithdrawStatus.isError = false;
+      });
+    } catch (error) {
+      runInAction(() => {
+        this.postNewWithdrawStatus.isFetching = false;
+        this.postNewWithdrawStatus.isSuccess = false;
+        this.postNewWithdrawStatus.isError = true;
+        this.postNewWithdrawStatus.errorMessage = error.message;
       });
     }
   }
