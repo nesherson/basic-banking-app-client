@@ -1,4 +1,4 @@
-import { compareAsc, formatISO, isEqual, lightFormat } from 'date-fns';
+import { isEqual, lightFormat } from 'date-fns';
 
 const transactionMethods = {
   0: 'deposit',

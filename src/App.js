@@ -9,7 +9,8 @@ import Signup from './features/auth/components/Signup';
 import Login from './features/auth/components/Login';
 import Layout from './features/user/components/layout/Layout';
 import Dashboard from './features/user/components/dashboard/Dashboard';
-import Transactions from './features/user/components/transactions/Transactions';
+import Transactions from './features/transactions/components/transactions/Transactions';
+import DepositWithdraw from './features/transactions/components/DepositWithdraw/DepositWithdraw';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Switch>
             <Route path='/dashboard' component={Dashboard} />
             <Route path='/transactions' component={Transactions} />
+            <Route path='/deposit-withdraw' component={DepositWithdraw} />
             <Redirect to='/dashboard' />
           </Switch>
         </Layout>
