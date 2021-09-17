@@ -6,13 +6,22 @@ function getLocalDateWithOffset() {
   return localDateWithOffset;
 }
 
-function parseStrDateToLocaleDate(str) {
-  return new Date(str).toLocaleDateString('en-GB', {
+const dateOptions = {
+  default: {
     weekday: 'long',
     year: 'numeric',
     month: 'long',
     day: 'numeric',
-  });
+  },
+  noWeekDay: {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  },
+};
+
+function parseStrDateToLocaleDate(str, options = dateOptions.default) {
+  return new Date(str).toLocaleDateString('en-GB', options);
 }
 
-export { getLocalDateWithOffset, parseStrDateToLocaleDate };
+export { getLocalDateWithOffset, parseStrDateToLocaleDate, dateOptions };
