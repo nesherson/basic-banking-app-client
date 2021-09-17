@@ -54,17 +54,17 @@ const Span = styled.span`
   font-size: 1.05rem;
 `;
 
-function Stats() {
+function Stats({ transactionsCount, totalSpent }) {
   return (
     <Container>
       <Date>
         Last <Span>30 days</Span>
       </Date>
       <TransactionsNum>
-        Transactions <Span>95</Span>
+        Transactions <Span>{transactionsCount}</Span>
       </TransactionsNum>
       <TotalSpent>
-        Total spent <Span>1,340KM</Span>
+        Total spent <Span>{totalSpent}KM</Span>
       </TotalSpent>
     </Container>
   );
