@@ -45,4 +45,15 @@ function mapTransactionsByDate(transactions) {
   return mappedTransactions;
 }
 
-export { parseEnum, mapTransactionsByDate };
+function getOneDimArrIndex(arr, row, col) {
+  let sum = 0;
+  for (let i = 0; i < arr.length; i++) {
+    if (i === row) {
+      break;
+    }
+    sum += arr[i].length;
+  }
+  return sum + col;
+}
+
+export { parseEnum, mapTransactionsByDate, getOneDimArrIndex };
