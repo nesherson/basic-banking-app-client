@@ -55,7 +55,8 @@ const Icon = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
 `;
 
 const TransactionMethod = styled.span`
@@ -72,7 +73,7 @@ const TransactionMethod = styled.span`
 `;
 
 const TransactionDescription = styled.p`
-  margin: 0;
+  margin: 0 0 0 1.5em;
   font-size: 0.85rem;
   color: ${(props) => (props.selected ? '#c4ccd4' : '#7b8c9d')};
 `;

@@ -20,93 +20,37 @@ const Container = styled.div`
   height: 100%;
 `;
 
-// const tempTransactions = [
-//   {
-//     id: 1,
-//     createdAt: '2021-09-12 03:49:00+02',
-//     senderCardNum: '1234432111112222',
-//     receiverCardNum: '0000333355556666',
-//     method: 2,
-//     description: 'La la la',
-//     amount: 123.33,
-//   },
-//   {
-//     id: 2,
-//     createdAt: '2021-09-12 04:49:00+02',
-//     senderCardNum: '1234432111112222',
-//     receiverCardNum: '0000333355556666',
-//     method: 2,
-//     description: 'La la la',
-//     amount: 123.33,
-//   },
-//   {
-//     id: 3,
-//     createdAt: '2021-09-12 05:49:00+02',
-//     senderCardNum: '1234432111112222',
-//     receiverCardNum: '0000333355556666',
-//     method: 0,
-//     description: 'La la la',
-//     amount: 20.0,
-//   },
-//   {
-//     id: 4,
-//     createdAt: '2021-09-12 06:49:00+02',
-//     senderCardNum: '1234432111112222',
-//     receiverCardNum: '0000333355556666',
-//     method: 1,
-//     description: 'La la la',
-//     amount: 15.0,
-//   },
-//   {
-//     id: 5,
-//     createdAt: '2021-09-12 03:49:00+02',
-//     senderCardNum: '1234432111112222',
-//     receiverCardNum: '0000333355556666',
-//     method: 2,
-//     description: 'La la la',
-//     amount: 123.33,
-//   },
-//   {
-//     id: 6,
-//     createdAt: '2021-09-12 04:49:00+02',
-//     senderCardNum: '1234432111112222',
-//     receiverCardNum: '0000333355556666',
-//     method: 2,
-//     description: 'La la la',
-//     amount: 123.33,
-//   },
-//   {
-//     id: 7,
-//     createdAt: '2021-09-12 05:49:00+02',
-//     senderCardNum: '1234432111112222',
-//     receiverCardNum: '0000333355556666',
-//     method: 0,
-//     description: 'La la la',
-//     amount: 20.0,
-//   },
-//   {
-//     id: 8,
-//     createdAt: '2021-09-12 06:49:00+02',
-//     senderCardNum: '1234432111112222',
-//     receiverCardNum: '0000333355556666',
-//     method: 1,
-//     description: 'La la la',
-//     amount: 15.0,
-//   },
-// ];
+function getTotalSpent(transactions, currentCardNumber) {
+  const totalSpent = transactions.reduce((prevState, currentTransaction) => {
+    if (parseEnum(currentTransaction.method) === 'withdraw') {
+      return prevState + currentTransaction.amount;
+    } else if (
+      parseEnum(currentTransaction.method) === 'payment' &&
+      currentTransaction.senderCardNum === currentCardNumber
+    ) {
+      return prevState + currentTransaction.amount;
+    }
+    return prevState;
+  }, 0);
+  return totalSpent;
+}
 
 const Transactions = observer(() => {
   const cardStore = useContext(CardStoreContext);
   const transactionsStore = useContext(TransactionsStoreContext);
 
-  const transactions = transactionsStore.lastMonthTransactions;
+  const lastMonthTransactions = transactionsStore.lastMonthTransactions;
+  const transactionsCount = lastMonthTransactions.length;
+  const totalSpent = getTotalSpent(
+    lastMonthTransactions,
+    cardStore.card.cardNumber
+  );
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [selectedIndex, setSelectedIndex] = useState([0, 0, 0]);
+  const selectedTransaction = lastMonthTransactions[selectedIndex[2]];
 
-  const selectedTransaction = transactions[selectedIndex];
-
-  const handleTransactionSelect = (index) => {
-    setSelectedIndex(index);
+  const handleTransactionSelect = (indexArr) => {
+    setSelectedIndex(indexArr);
   };
 
   useEffect(() => {
@@ -136,14 +80,14 @@ const Transactions = observer(() => {
   return (
     <Container>
       <Header />
-      <Stats />
+      <Stats transactionsCount={transactionsCount} totalSpent={totalSpent} />
       <ListHeader />
       <TransactionList
-        transactions={transactions}
+        transactions={lastMonthTransactions}
         selectedIndex={selectedIndex}
         handleTransactionSelect={handleTransactionSelect}
       />
-      {transactions.length !== 0 ? (
+      {lastMonthTransactions.length !== 0 ? (
         <TransactionDetails
           createdAt={selectedTransaction.createdAt}
           sender={selectedTransaction.senderCardNum}
