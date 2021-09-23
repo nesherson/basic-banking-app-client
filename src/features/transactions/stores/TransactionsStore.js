@@ -35,6 +35,28 @@ class TransactionsStore {
     isError: false,
     errorMessage: '',
   };
+  newTransaction = {
+    activeMethod: 'deposit',
+    depositAmount: 0,
+    withdrawAmount: 0,
+  };
+
+  handleMethodChange(method) {
+    if (method === this.newTransaction.activeMethod) return;
+    runInAction(() => {
+      this.newTransaction.activeMethod = method;
+      this.newTransaction.depositAmount = 0;
+      this.newTransaction.withdrawAmount = 0;
+    });
+  }
+
+  handleAmountChange(amount) {
+    runInAction(() => {
+      if (this.newTransaction.activeMethod === 'deposit')
+        this.newTransaction.depositAmount = amount;
+      else this.newTransaction.withdrawAmount = amount;
+    });
+  }
 
   constructor() {
     makeAutoObservable(this);
