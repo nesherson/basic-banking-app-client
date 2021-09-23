@@ -1,6 +1,10 @@
 import styled from 'styled-components';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { observer } from 'mobx-react-lite';
+import { useContext } from 'react';
+
+import { validateNumber } from '../../../../util/helpers';
+
+import { TransactionsStoreContext } from '../../stores/TransactionsStore';
 
 const Container = styled.div`
   display: flex;
@@ -16,6 +20,7 @@ const Button = styled.button`
   background-color: #174582;
   color: #fff;
   margin-bottom: 0.75em;
+  cursor: pointer;
 `;
 
 const Input = styled.input`
@@ -30,30 +35,37 @@ const Input = styled.input`
   background-color: ${(props) => (props.disabled ? '#e2e3e9' : '')};
 `;
 
-function NewTransaction({
-  method,
-  activeMethod,
-  handleMethodChange,
-  amount,
-  handleAmountChange,
-}) {
-  let reg = new RegExp('^[0-9]+$');
+const NewTransaction = observer(({ method }) => {
+  const transactionsStore = useContext(TransactionsStoreContext);
+
+  const amount =
+    method === 'deposit'
+      ? transactionsStore.newTransaction.depositAmount
+      : transactionsStore.newTransaction.withdrawAmount;
+  const activeMethod = transactionsStore.newTransaction.activeMethod;
 
   const isActive = () => {
     return method === activeMethod;
   };
 
+  const onMethodChange = (method) =>
+    transactionsStore.handleMethodChange(method);
+
+  const onAmountChange = (amount) =>
+    transactionsStore.handleAmountChange(amount);
+
   return (
     <Container>
-      <Button onClick={() => handleMethodChange(method)}>{method}</Button>
+      <Button onClick={() => onMethodChange(method)}>{method}</Button>
       <Input
         disabled={!isActive()}
         type='text'
         value={amount}
-        onChange={handleAmountChange}
+        onChange={({ target }) => onAmountChange(target.value)}
+        onKeyPress={validateNumber}
       />
     </Container>
   );
-}
+});
 
 export default NewTransaction;

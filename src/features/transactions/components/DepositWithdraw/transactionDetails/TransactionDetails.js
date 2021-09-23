@@ -1,10 +1,12 @@
 import styled from 'styled-components';
 import { MoreVertical as More } from 'react-feather';
+import { useContext } from 'react';
+import { observer } from 'mobx-react-lite';
 
-import {
-  parseStrDateToLocaleDate,
-  dateOptions,
-} from '../../../../../util/date';
+import { TransactionsStoreContext } from '../../../stores/TransactionsStore';
+import { CardStoreContext } from '../../../../card/stores/CardStore';
+
+import { parseStrDateToLocaleDate } from '../../../../../util/date';
 
 const Container = styled.section`
   grid-column: 2 / 3;
@@ -12,6 +14,8 @@ const Container = styled.section`
   background-color: rgba(226, 230, 233, 0.55);
   overflow: hidden;
   padding: 2.5em 3.5em;
+  display: flex;
+  flex-direction: column;
 `;
 
 const Header = styled.header`
@@ -67,20 +71,54 @@ const Amount = styled.span`
   font-weight: 400;
 `;
 
-const Date = styled.span`
+const StyledDate = styled.span`
   display: block;
   width: 95px;
   font-size: 0.9rem;
   color: #7b8c9d;
 `;
 
-const Time = styled.span`
-  display: block;
-  font-size: 0.9rem;
-  color: #7b8c9d;
+const Button = styled.button`
+  padding: 0.85em 1.75em;
+  font-size: 1.25rem;
+  text-transform: capitalize;
+  border: none;
+  background-color: #174582;
+  color: #fff;
+  margin-top: 0.75em;
+  align-self: center;
 `;
 
-function TransactionDetails() {
+const TransactionDetails = observer(() => {
+  const transactionsStore = useContext(TransactionsStoreContext);
+  const cardStore = useContext(CardStoreContext);
+
+  const currentDate = parseStrDateToLocaleDate(new Date(Date.now()));
+
+  const method = transactionsStore.newTransaction.activeMethod;
+  const amount =
+    method === 'deposit'
+      ? transactionsStore.newTransaction.depositAmount
+      : transactionsStore.newTransaction.withdrawAmount;
+
+  const handlePostNewTransaction = () => {
+    const { token } = JSON.parse(localStorage.getItem('userData'));
+    const values = {
+      cardId: cardStore.card.id,
+      token,
+      amount: parseInt(amount),
+    };
+    if (method === 'deposit') {
+      console.log('deposit');
+
+      transactionsStore.makeNewDeposit(values);
+    } else if (method === 'withdraw') {
+      console.log('withdraw');
+
+      transactionsStore.makeNewWithdraw(values);
+    }
+  };
+
   return (
     <Container>
       <Header>
@@ -92,26 +130,18 @@ function TransactionDetails() {
       <Details>
         <LeftSide>
           <Wrapper>
-            <Label>From</Label>
-            <StyledSpan>-</StyledSpan>
-          </Wrapper>
-          <Wrapper>
-            <Label>To</Label>
-            <StyledSpan>-</StyledSpan>
-          </Wrapper>
-          <Wrapper>
             <Label>Method</Label>
-            <StyledSpan>-</StyledSpan>
+            <StyledSpan>{method}</StyledSpan>
           </Wrapper>
         </LeftSide>
         <RightSide>
-          <Amount>-</Amount>
-          <Time>-</Time>
-          <Date>-</Date>
+          <Amount>{amount}</Amount>
+          <StyledDate>{currentDate}</StyledDate>
         </RightSide>
       </Details>
+      <Button onClick={handlePostNewTransaction}>Confirm</Button>
     </Container>
   );
-}
+});
 
 export default TransactionDetails;
