@@ -56,4 +56,21 @@ function getOneDimArrIndex(arr, row, col) {
   return sum + col;
 }
 
-export { parseEnum, mapTransactionsByDate, getOneDimArrIndex };
+function validateNumber(evt) {
+  let theEvent = evt || window.event;
+  let key;
+
+  if (theEvent.type === 'paste') {
+    key = theEvent.clipboardData.getData('text/plain');
+  } else {
+    key = theEvent.keyCode || theEvent.which;
+    key = String.fromCharCode(key);
+  }
+  let regex = /[0-9]|\./;
+  if (!regex.test(key)) {
+    theEvent.returnValue = false;
+    if (theEvent.preventDefault) theEvent.preventDefault();
+  }
+}
+
+export { parseEnum, mapTransactionsByDate, getOneDimArrIndex, validateNumber };
