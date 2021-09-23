@@ -52,21 +52,18 @@ async function fetchLastMonthTransactions({ cardId, token }) {
 
 async function postNewDeposit({ cardId, token, amount }) {
   try {
-    const response = await fetch(
-      `http://localhost:5000/transactions/card/${cardId}/deposit`,
-      {
-        method: 'GET',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          cardId,
-          amount,
-        }),
-      }
-    );
+    const response = await fetch(`http://localhost:5000/transactions/deposit`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        cardId,
+        amount,
+      }),
+    });
 
     const data = await response.json();
 
@@ -85,7 +82,7 @@ async function postNewWithdraw({ cardId, token, amount }) {
     const response = await fetch(
       `http://localhost:5000/transactions/withdraw`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
